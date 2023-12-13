@@ -3,6 +3,6 @@
     "id": 1,
     "priority": 1,
     "action": { "type": "block" },
-    "condition": {"urlFilter": "google.com", "resourceTypes": ["main_frame"] }
+    "condition": {"urlFilter": "netflix.com", "resourceTypes": ["main_frame"] }
   }
 ]

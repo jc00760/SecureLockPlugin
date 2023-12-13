@@ -5,6 +5,13 @@
   "manifest_version": 3,
   "background": {
   },
+  "declarative_net_request" : {
+    "rule_resources" : [{
+      "id": "ruleset_1",
+      "enabled": true,
+      "path": "rules.json"
+    }]
+  },
   "permissions": [
     "declarativeNetRequest",
     "declarativeNetRequestFeedback",
