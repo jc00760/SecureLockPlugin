@@ -1,67 +1,95 @@
+// Function to check lock status of current page
+async function checkLockStatus() {
+  // let locked_id = -1;
+  // chrome.tabs.query({ active: true, lastFocusedWindow: true }, async (tabs) => {
+  //   let url = tabs[0].url;
+  //   const rules = await chrome.declarativeNetRequest.getDynamicRules();
+  //   // const isLocked = rules.some((rule) => rule.condition.urlFilter === url);
+
+  //   for (const rule of rules) {
+  //     if (rule.condition.urlFilter === url) {
+  //       locked_id = rule.id;
+  //     }
+  //   }
+  //   updateButtonVisibility(locked_id > 0);
+  // });
+  // console.log(locked_id)
+  // return locked_id;
+  return new Promise((resolve) => {
+    let locked_id = -1;
+    chrome.tabs.query(
+      { active: true, lastFocusedWindow: true },
+      async (tabs) => {
+        let url = tabs[0].url;
+        const rules = await chrome.declarativeNetRequest.getDynamicRules();
+        console.log(rules);
+
+        for (const rule of rules) {
+          if (rule.condition.urlFilter === url) {
+            locked_id = rule.id;
+          }
+        }
+
+        updateButtonVisibility(locked_id > 0);
+        console.log(locked_id);
+        resolve(locked_id);
+      }
+    );
+  });
+}
+
 // HTML button elements
 window.onload = function () {
   const buttonLock = document.getElementById("lock");
   const buttonUnlock = document.getElementById("unlock");
 
   // check lock status on load
-  checkLockStatus();
+  checkLockStatus().then((locked_id) => {
+    // This callback will be executed when the Promise is resolved
+    // The resolved value (locked_id) is passed as an argument to this callback
+    console.log("Updated locked_id:", locked_id);
+  });
 
-  buttonLock.addEventListener("click", buttonClick);
+  buttonLock.addEventListener("click", function () {
+    toggleLock(true);
+  });
+
+  buttonUnlock.addEventListener("click", function () {
+    toggleLock(false);
+  });
 };
 
-function toggleLock(isLocked) {
+function toggleLock(toLock) {
   chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
     let url = tabs[0].url;
 
-    if (isLocked) {
+    // if (checkLockStatus > 0) {
+    if (toLock) {
       lock(url);
     } else {
-      unlock(url);
+      unlock();
     }
-
-    u
-    // use `url` here inside the callback because it's asynchronous!
-    console.log(url);
-    lock(url);
+    updateButtonVisibility(!toLock);
+    // updateButtonVisibility(!toLock).then(() => {
+    //   chrome.tabs.reload();
+    // });
     chrome.tabs.reload();
   });
 }
 
+// Function to update button visibility based on lock status
+function updateButtonVisibility(isLocked) {
+  const buttonLock = document.getElementById("lock");
+  const buttonUnlock = document.getElementById("unlock");
 
-
-function buttonClick() {
-  // const url = window.location.href;
-  console.log("lock clicked");
-
-
-// getting current page's url and locking page
-  chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-    let url = tabs[0].url;
-    // use `url` here inside the callback because it's asynchronous!
-    console.log(url);
-    lock(url);
-    chrome.tabs.reload();
-  });
+  if (isLocked) {
+    buttonLock.style.display = "none";
+    buttonUnlock.style.display = "block";
+  } else {
+    buttonLock.style.display = "block";
+    buttonUnlock.style.display = "none";
+  }
 }
-
-// // button1 click event listener to apply function
-// buttonLock.addEventListener("click", function() {
-//     // your function code here
-//     // get url and call lock with it
-//     const url = window.location.href;
-//     console.log("lock clicked")
-//     console.log(url);
-//     // lock(url)
-// });
-
-// [
-//   {
-//     id: 1,
-//     priority: 1,
-//     action: { type: "block" },
-//     condition: { urlFilter: "netflix.com", resourceTypes: ["main_frame"] },
-//   },
-// ];
 
 /**
  * Locks the url given by appending a new rule
@@ -70,48 +98,52 @@ function buttonClick() {
 async function lock(url) {
   // error handling:
   // what if already blocked? shouldn't happen but.
+  const locked_id = await checkLockStatus();
+
+  if (locked_id > 0) {
+    console.log("should not be seeing this");
+    return;
+  }
 
   // get existing rules
+  const oldRules = await chrome.declarativeNetRequest.getDynamicRules();
+  console.log(oldRules);
+  console.log(oldRules.length);
 
   // create new rule
+  const new_rule = [
+    {
+      id: oldRules.length + 1,
+      priority: 1,
+      action: { type: "block" },
+      condition: { urlFilter: url, resourceTypes: ["main_frame"] },
+    },
+  ];
 
-  // newRules = oldRules + new rule
-  const oldRules = await chrome.declarativeNetRequest.getDynamicRules();
-  console.log(oldRules)
-  console.log(oldRules.length)
-
-  const new_rule = [{
-    id: oldRules.length + 1,
-    priority: 1,
-    action: { type: "block" },
-    condition: { urlFilter: url, resourceTypes: ["main_frame"] },
-  }];
-
-  chrome.declarativeNetRequest.updateDynamicRules({
+  await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [],
     // addRules: newRules,
     addRules: new_rule,
   });
-  console.log("done")
+  chrome.tabs.reload();
+
+  console.log("locked");
 }
 
 /**
  * Unlocks the url given by removing it from the ruleset
- * @param {string} url- The URL to be unlocked
  */
-function unlock(url) {
+async function unlock() {
   // error handling:
   // what if no rules?
+  const toRemove = await checkLockStatus();
 
-  let toRemove;
-
-  for (const rule of rules) {
-    // find rule
-    toRemove = rule.id;
+  if (toRemove > 0) {
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: [toRemove],
+      addRules: [],
+    });
+    chrome.tabs.reload();
+    console.log("unlocked");
   }
-
-  chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [toRemove],
-    addRules: [],
-  });
 }
