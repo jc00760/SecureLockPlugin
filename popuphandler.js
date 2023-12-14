@@ -14,6 +14,7 @@ function buttonClick() {
     // use `url` here inside the callback because it's asynchronous!
     console.log(url);
     lock(url);
+    chrome.tabs.reload();
   });
 }
 
@@ -48,7 +49,6 @@ async function lock(url) {
 
   // create new rule
 
-  
 
   // newRules = oldRules + new rule
   const oldRules = await chrome.declarativeNetRequest.getDynamicRules();
