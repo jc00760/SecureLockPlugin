@@ -1,8 +1,33 @@
 // HTML button elements
 window.onload = function () {
   const buttonLock = document.getElementById("lock");
+  const buttonUnlock = document.getElementById("unlock");
+
+  // check lock status on load
+  checkLockStatus();
+
   buttonLock.addEventListener("click", buttonClick);
 };
+
+function toggleLock(isLocked) {
+  chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+    let url = tabs[0].url;
+
+    if (isLocked) {
+      lock(url);
+    } else {
+      unlock(url);
+    }
+
+    u
+    // use `url` here inside the callback because it's asynchronous!
+    console.log(url);
+    lock(url);
+    chrome.tabs.reload();
+  });
+}
+
+
 
 function buttonClick() {
   // const url = window.location.href;
@@ -49,7 +74,6 @@ async function lock(url) {
   // get existing rules
 
   // create new rule
-
 
   // newRules = oldRules + new rule
   const oldRules = await chrome.declarativeNetRequest.getDynamicRules();
