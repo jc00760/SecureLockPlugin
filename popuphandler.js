@@ -1,5 +1,4 @@
 // HTML button elements
-
 window.onload = function () {
   const buttonLock = document.getElementById("lock");
   buttonLock.addEventListener("click", buttonClick);
@@ -9,6 +8,8 @@ function buttonClick() {
   // const url = window.location.href;
   console.log("lock clicked");
 
+
+// getting current page's url and locking page
   chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
     let url = tabs[0].url;
     // use `url` here inside the callback because it's asynchronous!
