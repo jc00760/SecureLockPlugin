@@ -214,13 +214,13 @@ async function lock(url) {
     {
       id: oldRules.length + 1,
       priority: 1,
-      //  action: { type: "block" },
-      action: {
-        type: "redirect",
-        redirect: {
-          extensionPath: "/blocked.html",
-        },
-      },
+      action: { type: "block" },
+      // action: {
+      //   type: "redirect",
+      //   redirect: {
+      //     extensionPath: "/blocked.html",
+      //   },
+      // },
       condition: { urlFilter: url, resourceTypes: ["main_frame"] },
     },
   ];
