@@ -56,6 +56,7 @@ window.onload = function () {
 
   const creation_form = document.getElementById("passwordCreation");
   const password_form = document.getElementById("passwordForm");
+  const removeButton = document.getElementById("removeall");
 
   // check lock status on load
   checkLockStatus().then((locked_id) => {
@@ -64,6 +65,23 @@ window.onload = function () {
     console.log("Updated locked_id:", locked_id);
   });
 
+  removeButton.addEventListener("click", async () => {
+    const oldRules = await chrome.declarativeNetRequest.getDynamicRules();
+    console.log("inside remove all");
+    console.log(oldRules.length);
+
+    const allRules = [];
+
+    for (const rule of oldRules) {
+      allRules.push(rule.id);
+    }
+
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: allRules,
+      // addRules: newRules,
+      addRules: [],
+    });
+  });
   // first pw creation
   creation_form.addEventListener("submit", () => {
     const user_password = document.getElementById("pw-creation").value;
@@ -196,7 +214,13 @@ async function lock(url) {
     {
       id: oldRules.length + 1,
       priority: 1,
-      action: { type: "block" },
+      //  action: { type: "block" },
+      action: {
+        type: "redirect",
+        redirect: {
+          extensionPath: "/blocked.html",
+        },
+      },
       condition: { urlFilter: url, resourceTypes: ["main_frame"] },
     },
   ];

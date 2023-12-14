@@ -3,21 +3,23 @@
   "description": "Lock desired pages with a password!",
   "version": "1.0",
   "manifest_version": 3,
-  "background": {
-  },
+  "background": {},
   "permissions": [
     "declarativeNetRequest",
     "declarativeNetRequestFeedback",
     "tabs",
     "storage"
   ],
-  
-  "host_permissions": [
-    "http://www.blogger.com/*",
-    "http://*.google.com/*"
-  ],
+
+  "host_permissions": ["http://www.blogger.com/*", "http://*.google.com/*"],
   "action": {
     "default_popup": "hello.html",
     "default_icon": "hello_extensions.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked.html"],
+      "matches": ["*://*/*"]
+    }
+  ]
 }
