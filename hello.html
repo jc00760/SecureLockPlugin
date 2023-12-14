@@ -1,18 +1,24 @@
 <html>
   <body>
-    <h1>Hello Extensions</h1>
-    <!-- <script src="popup.js"></script> -->
+    <h1>LockIt</h1>
     
-    <form>
-      <label for="pw">password</label><br />
-      <input type="text" id="pw" name="pw" /><br />
+    <!-- password creation form -->
+    <form id = "passwordCreation">
+      <label for="pw">To lock this and consequent pages, create a password (> 8 characters, at least one number, one lowercase and one uppercase letter).</label><br />
+      <input type="text" id="pw-creation" required/><br />
+      <button id = "firstlock" type = "submit" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">Lock It!</button>
     </form>
-    
-    
-    <button id = "lock">Lock</button>
 
-    <!-- unlock button is initially invisble-->
-    <button id = "unlock" style="display: none;">Unlock</button>
+    <button id = "lock" style="display: none;">Lock It!</button>
+
+    
+    <!-- password form for unlocking pages-->
+    <form id = "passwordForm" hidden="true" style="display: none;" >
+      <label for="pw">Enter your password.</label><br />
+      <input type="text" id="pw" name="pw" required /><br />
+      <button id = "unlock" type = "submit">Unlock</button> 
+    </form>
+
     <script src="popuphandler.js"></script>
   </body>
   

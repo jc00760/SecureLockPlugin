@@ -8,7 +8,8 @@
   "permissions": [
     "declarativeNetRequest",
     "declarativeNetRequestFeedback",
-    "tabs"
+    "tabs",
+    "storage"
   ],
   
   "host_permissions": [
