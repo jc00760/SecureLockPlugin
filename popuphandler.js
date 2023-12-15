@@ -62,6 +62,7 @@ window.onload = function () {
   checkLockStatus().then((locked_id) => {
     // This callback will be executed when the Promise is resolved
     // The resolved value (locked_id) is passed as an argument to this callback
+    if (locked_id == -1) chrome.tabs.reload();
     console.log("Updated locked_id:", locked_id);
   });
 
@@ -82,6 +83,7 @@ window.onload = function () {
       addRules: [],
     });
   });
+
   // first pw creation
   creation_form.addEventListener("submit", () => {
     const user_password = document.getElementById("pw-creation").value;
@@ -118,6 +120,21 @@ window.onload = function () {
 };
 
 function toggleLock(toLock) {
+  // if (toLock) {
+  //   chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+  //     let url = tabs[0].url;
+  //     lock(url);
+  //     // if (checkLockStatus > 0) {
+  //     updateFormVisibility(!toLock);
+  //     // updateButtonVisibility(!toLock).then(() => {
+  //     //   chrome.tabs.reload();
+  //     // });
+      
+  //     // chrome.tabs.reload();
+  //   });
+  // } else {
+  //   unlock();
+  // }
   chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
     let url = tabs[0].url;
 
@@ -131,7 +148,8 @@ function toggleLock(toLock) {
     // updateButtonVisibility(!toLock).then(() => {
     //   chrome.tabs.reload();
     // });
-    chrome.tabs.reload();
+    
+    // chrome.tabs.reload();
   });
 }
 
@@ -233,7 +251,7 @@ async function lock(url) {
     addRules: new_rule,
   });
   chrome.tabs.reload();
-
+  
   console.log("locked");
 }
 
@@ -241,15 +259,15 @@ async function lock(url) {
  * Unlocks the url given by removing it from the ruleset
  */
 async function unlock() {
+  // chrome.tabs.reload();
   // error handling: what if no rules?
   const toRemove = await checkLockStatus();
-
+  console.log("hihihihihihi");
   if (toRemove > 0) {
     await chrome.declarativeNetRequest.updateDynamicRules({
       removeRuleIds: [toRemove],
       addRules: [],
     });
-    chrome.tabs.reload();
     console.log("unlocked");
   }
 }
