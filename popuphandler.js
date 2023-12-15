@@ -229,20 +229,22 @@ async function lock(url) {
   console.log(oldRules);
   console.log(oldRules.length);
 
+  console.log(url);
   // create new rule
   const new_rule = [
     {
       id: oldRules.length + 1,
       priority: 1,
-      action: { type: "block" },
-      // action: {
-      //   type: "redirect",
-      //   redirect: {
-      //     extensionPath: "/blocked.html",
-      //   },
-      // },
+      action: { 
+        type: "block"
+
+        // uncomment this part for redirect
+        // type: "redirect",
+        // redirect: { url : "https://lockit-locked.glitch.me" } 
+      },
       condition: { urlFilter: url, resourceTypes: ["main_frame"] },
     },
+
   ];
 
   await chrome.declarativeNetRequest.updateDynamicRules({

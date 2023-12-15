@@ -11,15 +11,15 @@
     "storage"
   ],
 
-  "host_permissions": ["http://www.blogger.com/*", "http://*.google.com/*"],
+  "host_permissions": ["http://www.blogger.com/*", "http://*.google.com/*", "<all_urls>"],
   "action": {
     "default_popup": "hello.html",
-    "default_icon": "hello_extensions.png"
+    "default_icon": "lock.png"
   },
   "web_accessible_resources": [
     {
-      "resources": ["blocked.html"],
-      "matches": ["*://*/*"]
+      "resources": ["locked.html", "lock.png"],
+      "matches": ["<all_urls>"]
     }
   ]
 }

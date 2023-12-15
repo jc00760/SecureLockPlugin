@@ -1,11 +1,11 @@
 body {
-    background-color: whitesmoke;
-    font-family: "courier new", monospace;
-    text-align: center;
-    padding: 200px;
-  }
-  
-  h1 {
-    font-size: 100px;
-    color: midnightblue;
-  }
+  background-color: whitesmoke;
+  font-family: "courier new", monospace;
+  text-align: center;
+  padding: 200px;
+}
+
+h1 {
+  font-size: 50px;
+  color: midnightblue;
+}
