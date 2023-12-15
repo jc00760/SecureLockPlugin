@@ -13,12 +13,12 @@
 
   "host_permissions": ["http://www.blogger.com/*", "http://*.google.com/*", "<all_urls>"],
   "action": {
-    "default_popup": "hello.html",
+    "default_popup": "./html/popup.html",
     "default_icon": "lock.png"
   },
   "web_accessible_resources": [
     {
-      "resources": ["locked.html", "lock.png"],
+      "resources": ["./html/locked.html", "lock.png"],
       "matches": ["<all_urls>"]
     }
   ]

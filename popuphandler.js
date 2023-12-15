@@ -36,19 +36,6 @@ async function getPassword() {
   });
 }
 
-// // checks whether user enters the correct password
-// async function passwordCheck(user_password) {
-//   return new Promise((resolve) => {
-//     let correct = false;
-
-//     chrome.storage.sync.get('password', async (pass) => {
-//       correct = (pass === user_password);
-//       console.log(correct)
-//       resolve(correct);
-//     });
-//   });
-// }
-
 // HTML button elements
 window.onload = function () {
   const buttonLock = document.getElementById("lock");
@@ -79,9 +66,10 @@ window.onload = function () {
 
     await chrome.declarativeNetRequest.updateDynamicRules({
       removeRuleIds: allRules,
-      // addRules: newRules,
       addRules: [],
     });
+    alert("Removed all locks!")
+    chrome.tabs.reload();
   });
 
   // first pw creation
@@ -96,10 +84,7 @@ window.onload = function () {
   // checking pw when unlocking
   password_form.addEventListener("submit", () => {
     const user_password = document.getElementById("pw").value;
-    console.log("inside passwordform")
-    // const correct = passwordCheck(user_password);
-
-    // const password = getPassword();
+    console.log("inside passwordform");
 
     getPassword().then((password) => {
       if (password && password === user_password) {
@@ -113,10 +98,6 @@ window.onload = function () {
   buttonLock.addEventListener("click", function () {
     toggleLock(true);
   });
-
-  // buttonUnlock.addEventListener("click", function () {
-  //   toggleLock(false);
-  // });
 };
 
 function toggleLock(toLock) {
