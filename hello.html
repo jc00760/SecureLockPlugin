@@ -1,26 +1,40 @@
 <html>
+  <head>
+    <link rel="stylesheet" href="page.css" />
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+  </head>
   <body>
     <h1>LockIt</h1>
-    
+
     <!-- password creation form -->
-    <form id = "passwordCreation">
-      <label for="pw">To lock this and consequent pages, create a password (> 8 characters, at least one number, one lowercase and one uppercase letter).</label><br />
-      <input type="text" id="pw-creation" required/><br />
-      <button id = "firstlock" type = "submit" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">Lock It!</button>
+    <form id="passwordCreation">
+      <label for="pw"
+        >To lock this and consequent pages, create a password (> 8 characters,
+        at least one number, one lowercase and one uppercase letter).</label
+      ><br />
+      <input type="text" id="pw-creation" required /><br />
+      <button
+        id="firstlock"
+        type="submit"
+        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+        class="button-4"
+      >
+        Lock It!
+      </button>
     </form>
 
-    <button id = "lock" style="display: none;">Lock It!</button>
+    <button id="lock" style="display: none" class="button-4">Lock It!</button>
 
-    
     <!-- password form for unlocking pages-->
-    <form id = "passwordForm" hidden="true" style="display: none;" >
+    <form id="passwordForm" hidden="true" style="display: none">
       <label for="pw">Enter your password.</label><br />
       <input type="text" id="pw" name="pw" required /><br />
-      <button id = "unlock" type = "submit">Unlock</button> 
+      <button id="unlock" type="submit" class="button-4">Unlock</button>
     </form>
 
-    <button id = "removeall">Remove all rules</button>
+    <footer>
+      <button id="removeall" class="button-4">Remove all rules</button>
+    </footer>
     <script src="popuphandler.js"></script>
   </body>
-  
 </html>

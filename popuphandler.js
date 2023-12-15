@@ -94,6 +94,7 @@ window.onload = function () {
   // checking pw when unlocking
   password_form.addEventListener("submit", () => {
     const user_password = document.getElementById("pw").value;
+    console.log("inside passwordform")
     // const correct = passwordCheck(user_password);
 
     // const password = getPassword();
@@ -173,6 +174,7 @@ function updateFormVisibility(isLocked) {
 
       creation_form.style.display = "block";
       creation_form.style.hidden = "false";
+
       buttonLock.style.display = "none";
     }
     console.log(password);
@@ -239,8 +241,7 @@ async function lock(url) {
  * Unlocks the url given by removing it from the ruleset
  */
 async function unlock() {
-  // error handling:
-  // what if no rules?
+  // error handling: what if no rules?
   const toRemove = await checkLockStatus();
 
   if (toRemove > 0) {
