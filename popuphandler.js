@@ -39,8 +39,6 @@ async function getPassword() {
 // HTML button elements
 window.onload = function () {
   const buttonLock = document.getElementById("lock");
-  // const buttonUnlock = document.getElementById("unlock");
-
   const creation_form = document.getElementById("passwordCreation");
   const password_form = document.getElementById("passwordForm");
   const removeButton = document.getElementById("removeall");
@@ -101,21 +99,6 @@ window.onload = function () {
 };
 
 function toggleLock(toLock) {
-  // if (toLock) {
-  //   chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-  //     let url = tabs[0].url;
-  //     lock(url);
-  //     // if (checkLockStatus > 0) {
-  //     updateFormVisibility(!toLock);
-  //     // updateButtonVisibility(!toLock).then(() => {
-  //     //   chrome.tabs.reload();
-  //     // });
-      
-  //     // chrome.tabs.reload();
-  //   });
-  // } else {
-  //   unlock();
-  // }
   chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
     let url = tabs[0].url;
 
@@ -126,27 +109,14 @@ function toggleLock(toLock) {
       unlock();
     }
     updateFormVisibility(!toLock);
-    // updateButtonVisibility(!toLock).then(() => {
-    //   chrome.tabs.reload();
-    // });
-    
-    // chrome.tabs.reload();
   });
 }
 
 // Function to update button visibility based on lock status
 function updateFormVisibility(isLocked) {
   const buttonLock = document.getElementById("lock");
-  // const buttonUnlock = document.getElementById("unlock");
-
   const creation_form = document.getElementById("passwordCreation");
-
   const password_form = document.getElementById("passwordForm");
-
-  // get password from storage
-  // const password = chrome.storage.sync.get('password')
-  // const password = getPassword();
-  // console.log("password inside updateform visibility", password);
 
   getPassword().then((password) => {
     // locked, only password form visible
@@ -179,16 +149,7 @@ function updateFormVisibility(isLocked) {
     console.log(password);
     // This callback will be executed when the Promise is resolved
     // The resolved value (locked_id) is passed as an argument to this callback
-    // console.log("Updated locked_id:", locked_id);
   });
-
-  // if (isLocked) {
-  //   buttonLock.style.display = "none";
-  //   buttonUnlock.style.display = "block";
-  // } else {
-  //   buttonLock.style.display = "block";
-  //   buttonUnlock.style.display = "none";
-  // }
 }
 
 /**
@@ -196,8 +157,7 @@ function updateFormVisibility(isLocked) {
  * @param {string} url- The URL to be locked
  */
 async function lock(url) {
-  // error handling:
-  // what if already blocked? shouldn't happen but.
+  // error handling: what if already blocked? shouldn't happen but.
   const locked_id = await checkLockStatus();
 
   if (locked_id > 0) {
@@ -219,18 +179,16 @@ async function lock(url) {
       action: { 
         type: "block"
 
-        // uncomment this part for redirect
+        // uncomment this part for redirect (stretch goal)
         // type: "redirect",
         // redirect: { url : "https://lockit-locked.glitch.me" } 
       },
       condition: { urlFilter: url, resourceTypes: ["main_frame"] },
     },
-
   ];
 
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [],
-    // addRules: newRules,
     addRules: new_rule,
   });
   chrome.tabs.reload();
@@ -242,7 +200,6 @@ async function lock(url) {
  * Unlocks the url given by removing it from the ruleset
  */
 async function unlock() {
-  // chrome.tabs.reload();
   // error handling: what if no rules?
   const toRemove = await checkLockStatus();
   console.log("hihihihihihi");
